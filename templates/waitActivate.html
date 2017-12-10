@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block body_contents %}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-2">
+					<div class="page-header">
+						<h1>Thank you for visiting!</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-2">
+					{%if info%}
+					<div class="alert alert-info" role="alert">
+						{{info}}
+					</div>
+					{% endif %}
+					{%if fail%}
+					<div class="alert alert-danger" role="alert">
+						{{fail}}
+					</div>
+					{% endif %}
+					{%if success%}
+					<div class="alert alert-success" role="alert">
+						{{success}}
+					</div>
+					<a href="loginPage" class="btn btn-success btn-block btn-lg" >Sign In</a>
+					<hr>
+					{% endif %}
+					{%if logout%}
+					<div class="alert alert-success" role="alert">
+						{{logout}}
+					</div>
+					<hr>
+					{% endif %}
+				</div>
+			</div>
+			<!-- /.row -->
+			<div class = "row">
+				<div class="col-sm-8 col-sm-push-2">
+				<!-- Image -->
+					{% if not logout%}
+					<figure class="margin-b-2">
+						<img class="img-responsive" src="{{url_for('static',filename = 'static/email.png')}}" alt="">
+					</figure>
+					<hr>
+					{% else%}
+					<figure class="margin-b-2">
+						<img class="img-responsive" src="{{url_for('static',filename = 'static/thank.jpg')}}" alt="">
+					</figure>
+					<hr>
+					<a href="loginPage" class="btn btn-primary btn-block btn-lg" >Sign In</a>
+					{% endif %}
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+		<!-- /.container-fluid -->
+{% endblock %}

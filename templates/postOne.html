@@ -1,0 +1,327 @@
+{% extends "base.html"%}
+{%block body_contents%}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+				<!-- /.navbar-header -->
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="home?currentuser={{currentuser.username}}">HOME</a></li>
+						<li><a href="searchPostPage?currentuser={{currentuser.username}}">SEARCH</a></li>
+						<li><a href="friendList?currentuser={{currentuser.username}}">FRIENDS</a></li>
+						<li><a href="profilePage?currentuser={{currentuser.username}}&target={{currentuser.username}}">SETTING</a></li>
+						<li><a href="logout?currentuser={{currentuser.username}}">LOG OUT</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Post Content</h1>
+						</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<p class="lead">Message:</p>
+					<p style="text-align:center">
+						{% for m in tpost.message%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+					</p>
+					<hr>
+					<!-- Image -->
+					<p class="lead">Picture:</p>
+					<figure class="margin-b-2">
+					{% if tpost.picture%}
+					<img src="{{tpost.picture}}"  width="200px" height="200px"  style="text-align:center" alt="" >
+					{% endif%}
+					</figure>
+					<hr>
+
+					<!-- Comments -->
+					<h3>Comments</h3>
+					{%for i in range(plen)%}
+					{%if i <= 2%}
+					<div id="showcomment{{i}}">
+					<div class="well">
+						<div class="media">
+							<div class="media-left">
+								{% if comments[i].poster.headimage%}
+									<img src="{{comments[i].poster.headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+									{% if comments[i].poster.full_name%}
+									<h4 class="margin-t-0">
+										<a href="personDetail?currentuser={{currentuser.username}}&target={{comments[i].poster.username}}">
+											{{comments[i].poster.full_name}}
+										</a>
+									</h4>
+									{% else%}
+									<h4 class="margin-t-0"><a href="personDetail?currentuser={{currentuser.username}}&target={{comments[i].poster.username}}">
+										{{comments[i].poster.username}}</a></h4>
+									{% endif%}
+								<p><span class="glyphicon glyphicon-time"></span>{{comments[i].time}}</p>
+
+								<p>
+									{% for m in comments[i].message%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+								</p>
+								<p>
+									<button class="btn btn-sm btn-default">
+										<span class="glyphicon glyphicon-thumbs-up"></span> Upvote
+									</button>
+									<button class="btn btn-sm btn-default">
+										<span class="glyphicon glyphicon-thumbs-down"></span> Downvote
+									</button>
+									<button class="btn btn-sm btn-default" id="replybutton{{comments[i].time}}{{comments[i].poster.username}}" type="button" onclick="displayreply('{{comments[i].time}}{{comments[i].poster.username}}')">
+										<span class="glyphicon glyphicon-comment"></span> Reply
+									</button>
+									{% set url= "postDetail" %}
+									<button class="btn btn-sm btn-default" onclick="post('{{url}}',{pfilename:'{{comments[i].filename}}',pusername:'{{comments[i].username}}',currentuser:'{{currentuser.username}}'})">
+										<span class="glyphicon 	glyphicon glyphicon-list"></span> Detail
+									</button>
+									{% if comments[i].poster.username == currentuser.username%}
+									{% set url= "deletePost" %}
+									<button class="btn btn-sm btn-danger" onclick="post('{{url}}',{pfilename:'{{comments[i].filename}}',pusername:'{{comments[i].username}}',currentuser:'{{currentuser.username}}'})">
+										<span class="glyphicon glyphicon-minus" ></span> Delete
+									</button>
+									{% endif %}
+								</p>
+								<div id="replydiv{{comments[i].time}}{{comments[i].poster.username}}" style = "display:none;">
+								<form id="newcommment{{comments[i].time}}{{comments[i].poster.username}}" action="newPost" method="POST">
+									<input type="hidden" name="currentuser" value="{{currentuser.username}}">
+									<input type="hidden" name="postType" value="newcomment">
+									<input type="hidden" name="tfilename" value="{{comments[i].filename}}">
+									<input type="hidden" name="tusername" value="{{comments[i].username}}">
+									<input type="hidden" name="source" value="postOne.html">
+									<div class="form-group">
+										<label for="contactComment">Comment</label>
+										<textarea class="form-control" id="contactComment" name="content"></textarea>
+									</div>
+									<button type="submit" class="btn btn-default">Submit</button>
+								</form>
+								</div>
+								<script  type="text/javascript">
+								function displayreply(s){
+								var x = "replydiv"+s;
+								document.getElementById(x).style.display =  document.getElementById(x).style.display =="block"?"none":"block";
+								}
+								</script>
+							</div>
+						</div>
+					</div>
+					</div>
+					{%else%}
+					<div id="showcomment{{i}}" style ="display:none;">
+					<div class="well">
+						<div class="media">
+							<div class="media-left">
+								{% if comments[i].poster.headimage%}
+									<img src="{{comments[i].poster.headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+									{% if comments[i].poster.full_name%}
+									<h4 class="margin-t-0">
+										<a href="personDetail?currentuser={{currentuser.username}}&target={{comments[i].poster.username}}">
+											{{comments[i].poster.full_name}}
+										</a>
+									</h4>
+									{% else%}
+									<h4 class="margin-t-0"><a href="personDetail?currentuser={{currentuser.username}}&target={{comments[i].poster.username}}">
+										{{comments[i].poster.username}}</a></h4>
+									{% endif%}
+								<p><span class="glyphicon glyphicon-time"></span>{{comments[i].time}}</p>
+
+								<p>
+									{% for m in comments[i].message%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+								</p>
+								<p>
+									<button class="btn btn-sm btn-default">
+										<span class="glyphicon glyphicon-thumbs-up"></span> Upvote
+									</button>
+									<button class="btn btn-sm btn-default">
+										<span class="glyphicon glyphicon-thumbs-down"></span> Downvote
+									</button>
+									<button class="btn btn-sm btn-default" id="replybutton{{comments[i].time}}{{comments[i].poster.username}}" type="button" onclick="displayreply('{{comments[i].time}}{{comments[i].poster.username}}')">
+										<span class="glyphicon glyphicon-comment"></span> Reply
+									</button>
+									{% set url= "postDetail" %}
+									<button class="btn btn-sm btn-default" onclick="post('{{url}}',{pfilename:'{{comments[i].filename}}',pusername:'{{comments[i].username}}',currentuser:'{{currentuser.username}}'})">
+										<span class="glyphicon 	glyphicon glyphicon-list"></span> Detail
+									</button>
+									{% if comments[i].poster.username == currentuser.username%}
+									{% set url= "deletePost" %}
+									<button class="btn btn-sm btn-danger" onclick="post('{{url}}',{pfilename:'{{comments[i].filename}}',pusername:'{{comments[i].username}}',currentuser:'{{currentuser.username}}'})">
+										<span class="glyphicon glyphicon-minus" ></span> Delete
+									</button>
+									{% endif %}
+								</p>
+								<div id="replydiv{{comments[i].time}}{{comments[i].poster.username}}" style = "display:none;">
+								<form id="newcommment{{comments[i].time}}{{comments[i].poster.username}}" action="newPost" method="POST">
+									<input type="hidden" name="currentuser" value="{{currentuser.username}}">
+									<input type="hidden" name="postType" value="newcomment">
+									<input type="hidden" name="tfilename" value="{{comments[i].filename}}">
+									<input type="hidden" name="tusername" value="{{comments[i].username}}">
+									<input type="hidden" name="source" value="postOne.html">
+									<div class="form-group">
+										<label for="contactComment">Comment</label>
+										<textarea class="form-control" id="contactComment" name="content"></textarea>
+									</div>
+									<button type="submit" class="btn btn-default">Submit</button>
+								</form>
+								</div>
+								<script  type="text/javascript">
+								function displayreply(s){
+								var x = "replydiv"+s;
+								document.getElementById(x).style.display =  document.getElementById(x).style.display =="block"?"none":"block";
+								}
+								</script>
+							</div>
+						</div>
+					</div>
+					</div>
+					{% endif %}
+					{% endfor%}
+					<!-- Pager -->
+
+					{% if comments%}
+					{%if plen/2 > plen//2%}
+					{%set s = plen//2+1%}
+					{%else%}
+					{%set s = plen//2 %}
+					{%endif%}
+
+					<nav>
+						<ul class="pager">
+							<li class="previous disabled" id ="prepage"><a onclick="getprePage('showcomment','{{s}}','{{plen}}','3','0')"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Older</a></li>
+							<li id="currentpage" value="1" style="display:block">
+							<li class="next" id = "nextpage"><a onclick="getnextPage('showcomment','{{s}}','{{plen}}','3','0')" >Newer <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></li>
+						</ul>
+					</nav>
+					{% else%}
+					<div class="alert alert-info" role="alert">
+						<p>No comment on the Wall! </p>
+					</div>
+					{% endif %}
+					<hr>
+
+				</div>
+				<div class="col-sm-4 col-sm-pull-8">
+
+					<!-- Panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="media">
+							<div class="media-left">
+								{% if tpost.poster.headimage%}
+									<img src="{{tpost.poster.headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+								{% if tpost.poster.full_name%}
+									<h3 class="margin-t-1">
+										<a href="personDetail?currentuser={{currentuser.username}}&target={{tpost.poster.username}}">
+											{{tpost.poster.full_name}}
+										</a>
+									</h3>
+									{% else%}
+									<h3 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{tpost.poster.username}}">
+										{{tpost.poster.username}}</a></h3>
+									{% endif%}
+							</div>
+						</div>
+						</div>
+						<div class="panel-body">
+							<h4>Post on <span class="glyphicon glyphicon-time"></span> {{tpost.time}} </h4>
+						</div>
+					</div>
+					<hr>
+					<!-- Panel -->	<!-- Comment form -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="media">
+							<div class="media-left">
+								{% if currentuser.headimage%}
+									<img src="{{currentuser.headimage}}"  class="img img-circle" width="35px" height="35px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" class="img img-circle" width="35px" height="35px" alt="">
+									{% endif%}
+									<!--<img src="http://placehold.it/70x70"  alt=""> -->
+							</div>
+							<div class="media-body">
+								{% if currentuser.full_name%}
+									<h5 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{currentuser.username}}">{{currentuser.full_name}}</a></h5>
+									{% else%}
+									<h5 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{currentuser.username}}">{{currentuser.username}}</a></h5>
+									{% endif%}
+							</div>
+						</div>
+						</div>
+						<div class="panel-body">
+							<h5>Leave a comment</h5>
+							<form id="newcommmenttarget" action="newPost" method="POST">
+									<input type="hidden" name="currentuser" value="{{currentuser.username}}">
+									<input type="hidden" name="postType" value="newcomment">
+									<input type="hidden" name="tfilename" value="{{tpost.filename}}">
+									<input type="hidden" name="tusername" value="{{tpost.username}}">
+									<input type="hidden" name="source" value="postOne.html">
+								<div class="form-group">
+										<label for="contactComment">Comment</label>
+										<textarea class="form-control" id="thisComment" name="content"></textarea>
+									</div>
+									<button type="submit" class="btn btn-default">Submit</button>
+								</form>
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+		<!-- /.container-fluid -->
+{% endblock%}
+

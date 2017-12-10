@@ -1,0 +1,116 @@
+{% extends "base.html"%}
+{% block body_contents%}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+				<!-- /.navbar-header -->
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="home?currentuser={{currentuser.username}}">HOME</a></li>
+						<li><a href="searchPostPage?currentuser={{currentuser.username}}">SEARCH</a></li>
+						<li><a href="friendList?currentuser={{currentuser.username}}">FRIENDS</a></li>
+						<li><a href="profilePage?currentuser={{currentuser.username}}&target={{currentuser.username}}">SETTING</a></li>
+						<li><a href="logout?currentuser={{currentuser.username}}">LOG OUT</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Show Notification</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+						{% for noti in notificaion%}
+						{% if noti%}
+						<div class="list-group">
+							<a  class="list-group-item "style = "background-color:#F4F6F6;">
+							<h3 class="list-group-item-heading" ></h3>
+						  </a>
+						  <a  class="list-group-item">
+							  <div class="media">
+								<div class="media-left">
+								<h4 class="list-group-item-heading">{{noti}}</h4>
+								</div>
+
+								<div class="media-right">
+								{%if "request"in noti%}
+									{% set url= "addFriend" %}
+									<button onclick="post('{{url}}',{message:'{{noti}}',currentuser:'{{currentuser.username}}'})"class="btn btn-sm btn-success" >
+										<span class="glyphicon glyphicon-plus" ></span> Agree
+									</button>
+
+								{%endif%}
+								</div>
+							  </div>
+						  </a>
+
+						</div>
+{%endif%}
+					{% endfor%}
+
+				</div>
+
+
+				<div class="col-sm-4 col-sm-pull-8">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="media">
+								<div class="media-left">
+									{% if target.headimage%}
+									<img src="{{target.headimage}}"  class="img img-circle" width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" class="img img-circle" width="70px" height="70px" alt="">
+									{% endif%}
+									<!--<img src="http://placehold.it/70x70"  alt=""> -->
+								</div>
+								<div class="media-body">
+									{% if target.full_name%}
+									<h3 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{target.username}}">{{target.full_name}}</a></h3>
+									{% else%}
+									<h3 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{target.username}}">{{target.username}}</a></h3>
+									{% endif%}
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<p>Profile:</p>
+							<p>{{target.profile}}</p>
+						</div>
+					</div>
+
+				</div>
+			<!-- /.row -->
+			</div>
+			<!-- /.row -->
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- /.container-fluid -->
+
+{% endblock%}
+

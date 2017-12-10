@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block body_contents %}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Welcome to UNSWtalk!</h1>
+					</div>
+				</div>
+				<hr>
+				<div class="col-sm-4 col-sm-pull-8">
+						{% if error%}
+					<script>$(".alert").alert()</script>
+					  <div class="alert alert-danger" role="alert">
+					  {{error}}
+					  </div>
+					{% endif %}
+				</div>
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<!-- Image -->
+					<figure class="margin-b-2">
+						<img class="img-responsive" src="{{url_for('static',filename = 'static/4-Username-01d-web.jpg')}}" alt="">
+					</figure>
+					<hr>
+				</div>
+
+				<div class="col-sm-4 col-sm-pull-8">
+
+                      <div class="well" >
+						  <script type="text/javascript">
+							  function validate_required(field,alerttxt){
+							  	with(field){
+									if(value == null || value ="")
+									{alert(alerttxt);return false }
+									else(return true)
+							  	}
+							  }
+							  function check_form(thisform){
+								with(thisform){
+									if(validate_required(username,"please input your username!")== false)
+										{username.focus(); return false }
+									if (password,"please input your password") == false)
+										{password.focus();return false}
+
+								}
+							  }
+						  </script>
+                          <form id="loginForm" method="POST" action="login" >
+                              <div class="form-group">
+                                  <label for="username" class="control-label">Username</label>
+                                  <input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter your zNumber" placeholder="Please enter your zNumber">
+                                  <span class="help-block"></span>
+                              </div>
+                              <div class="form-group">
+                                  <label for="password" class="control-label">Password</label>
+                                  <input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
+                                  <span class="help-block"></span>
+                              </div>
+                              <p ><a href="forgetPasswordPage" style = "color: #717D7E;">Forgot Password?</a></p>
+                              <br>
+
+                              <button type="submit" class="btn btn-primary btn-block btn-lg" >Login</button>
+                              <a href="registerPage" class="btn btn-success btn-block btn-lg">Register</a>
+                          </form>
+                      </div>
+
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- /.container-fluid -->
+{% endblock %}

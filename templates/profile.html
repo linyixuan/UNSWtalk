@@ -1,0 +1,177 @@
+{% extends "base.html"%}
+{% block body_contents%}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+				<!-- /.navbar-header -->
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="home?currentuser={{currentuser.username}}">HOME</a></li>
+						<li><a href="searchPostPage?currentuser={{currentuser.username}}">SEARCH</a></li>
+						<li><a href="friendList?currentuser={{currentuser.username}}">FRIENDS</a></li>
+						<li><a href="profilePage?currentuser={{currentuser.username}}&target={{currentuser.username}}">SETTING</a></li>
+						<li><a href="logout?currentuser={{currentuser.username}}">LOG OUT</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Show Profile</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+						<div class="list-group">
+							<a  class="list-group-item "style = "background-color:#F4F6F6;">
+							<h4 class="list-group-item-heading" >Username:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.username}}</h4>
+						  </a>
+
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Full Name:</h4>
+						  </a>
+
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.full_name}}</h4>
+						  </a>
+
+							<a  class="list-group-item" style = "background-color:#D5DBDB;">
+							<h4 class="list-group-item-heading">Gender:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.gender}}</h4>
+						  </a>
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Profile:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.profile}}</h4>
+						  </a>
+							{% if type == "setting"%}
+							<a  class="list-group-item" style = "background-color:#F2F4F4;">
+							<h4 class="list-group-item-heading">Birthday:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.birthday}}</h4>
+						  </a>
+
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Email:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.email}}</h4>
+						  </a>
+
+							<a  class="list-group-item "style = "background-color:#F4F6F6;">
+							<h4 class="list-group-item-heading">Friends:</h4>
+						  </a>
+
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.friends}}</h4>
+						  </a>
+
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Program:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.program}}</h4>
+						  </a>
+							<a  class="list-group-item" style = "background-color:#D5DBDB;">
+							<h4 class="list-group-item-heading">Courses:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.course}}</h4>
+						  </a>
+
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Home_suburb:</h4>
+						  </a>
+
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.home_suburb}}</h4>
+						  </a>
+
+							<a  class="list-group-item "style = "background-color:#F4F6F6;">
+							<h4 class="list-group-item-heading">Home_longitude</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.home_longitude}}</h4>
+						  </a>
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Home_latitude:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.home_latitude}}</h4>
+						  </a>
+							<a  class="list-group-item" style = "background-color:#D5DBDB;">
+							<h4 class="list-group-item-heading">Notified:</h4>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<h4 class="list-group-item-heading">{{target.notified}}</h4>
+						  </a>
+
+							{% endif%}
+						</div>
+
+				</div>
+				<div class="col-sm-4 col-sm-pull-8">
+				<!-- Panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">The Image</h4>
+						</div>
+						<div class="panel-body" align="center">
+						<img class="img-response" src="{{target.headimage}}" alt="">
+						</div>
+					</div>
+					{% if type=="setting"%}
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">Edit service</h4>
+						</div>
+						<div class="panel-body">
+							<ul>
+								<li style="margin:20px;padding:0px"><a href = "settingPage?currentuser={{currentuser.username}}" class="btn btn-primary" style="width:80%;background-color:#85929E;border-color:#85929E">Edit profile</a></li>
+
+								<li style="margin:20px;padding:0px"><a href="personDetail?currentuser={{currentuser.username}}&target={{currentuser.username}}"class="btn btn-primary" style="width:80%;background-color:#5D6D7E;border-color:5D6D7E">Edit posts</a></li>
+							</ul>
+						</div>
+					</div>
+					{% endif%}
+				</div>
+			<!-- /.row -->
+			</div>
+			<!-- /.row -->
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- /.container-fluid -->
+
+{% endblock%}
+

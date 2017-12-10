@@ -1,0 +1,307 @@
+{%extends "base.html"%}
+{% block body_contents%}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+				<!-- /.navbar-header -->
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="home?currentuser={{currentuser.username}}">HOME</a></li>
+						<li><a href="searchPostPage?currentuser={{currentuser.username}}">SEARCH</a></li>
+						<li><a href="friendList?currentuser={{currentuser.username}}">FRIENDS</a></li>
+						<li><a href="profilePage?currentuser={{currentuser.username}}&target={{currentuser.username}}">SETTING</a></li>
+						<li><a href="logout?currentuser={{currentuser.username}}">LOG OUT</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Search Friend</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					{% if info%}
+					  <div class="alert alert-info" role="alert">
+					  There are {{plen}} results for search {{info}}:
+					  </div>
+					{% endif %}
+
+					{% if results%}
+					{%for i in range(plen)%}
+					{%if i <= 5%}
+					<div id="showsearchfriend{{i}}">
+					<div class="well">
+						<div class="media">
+							<div class="media-left">
+								{% if results[i].headimage%}
+									<img src="{{results[i].headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+									{% if results[i].full_name%}
+									<h4 class="margin-t-0">
+										<a href="profilePage?currentuser={{currentuser.username}}&target={{results[i].username}}">
+											{{results[i].full_name}}
+										</a>
+									</h4>
+									{% else%}
+									<h4 class="margin-t-0"><a href="profilePage?currentuser={{currentuser.username}}&target={{results[i].username}}">
+										{{results[i].username}}</a></h4>
+								{% endif%}
+								<p>Profile:</p>
+								{% for m in results[i].profile%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+
+							</div>
+							<div class = "media-left">
+								{% if currentuser.username != results[i].username and results[i].username not in currentuser.friendsList%}
+								<p>
+									{% set url= "addFriendRequest" %}
+									<button onclick="post('{{url}}',{target:'{{results[i].username}}',currentuser:'{{currentuser.username}}'})" class="btn btn-sm btn-success" sytle="float:right;">
+										<span class="glyphicon glyphicon-plus" ></span> add
+									</button>
+								</p>
+								{%else%}
+								<p>
+
+									<button class="btn btn-sm btn-success disabled" sytle="float:right;">
+										<span class="glyphicon glyphicon-plus" ></span> add
+									</button>
+								</p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					</div>
+					{%else%}
+					<div id = "showsearchfriend{{i}}" style="display:none;">
+						<div class="well">
+						<div class="media">
+							<div class="media-left">
+								{% if results[i].headimage%}
+									<img src="{{results[i].headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+									{% if results[i].full_name%}
+									<h4 class="margin-t-0">
+										<a href="profilePage?currentuser={{currentuser.username}}&target={{results[i].username}}">
+											{{results[i].full_name}}
+										</a>
+									</h4>
+									{% else%}
+									<h4 class="margin-t-0"><a href="profilePage?currentuser={{currentuser.username}}&target={{results[i].username}}">
+										{{results[i].username}}</a></h4>
+								{% endif%}
+								<p>Profile:</p>
+								{% for m in results[i].profile%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+
+							</div>
+							<div class = "media-left">
+								{% if currentuser.username != results[i].username and results[i].username not in currentuser.friendsList%}
+								<p>
+									{% set url= "addFriendRequest" %}
+									<button onclick="post('{{url}}',{target:'{{results[i].username}}',currentuser:'{{currentuser.username}}'})"class="btn btn-sm btn-success" sytle="float:right;">
+										<span class="glyphicon glyphicon-plus" ></span> add
+									</button>
+								</p>
+								{%else%}
+								<p>
+									<button class="btn btn-sm btn-success disabled" sytle="float:right;">
+										<span class="glyphicon glyphicon-plus" ></span> add
+									</button>
+								</p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					</div>
+
+					{%endif%}
+					{% endfor%}
+					<hr>
+
+					<!-- Pager -->
+
+					{% if results%}
+					{%if plen/6 > plen//6%}
+					{%set s = plen//6+1%}
+					{%else%}
+					{%set s = plen//6 %}
+					{%endif%}
+					<nav>
+						<ul class="pager">
+							<li class="previous disabled" id ="prepage"><a onclick="getprePage('showsearchfriend','{{s}}','{{plen}}','6','1')"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Older</a></li>
+							<li id="currentpage" value="1" style="display:block">
+							<li class="next" id = "nextpage"><a onclick="getnextPage('showsearchfriend','{{s}}','{{plen}}','6','1')" >Newer <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></li>
+						</ul>
+					</nav>
+					{% else%}
+					<div class="alert alert-warning" role="alert">
+						<p>No user </p>
+					</div>
+					{% endif %}
+					<hr>
+
+{% endif %}
+				</div>
+
+				<div class="col-sm-4 col-sm-pull-8">
+					<!-- Panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="media">
+								<div class="media-left">
+									{% if currentuser.headimage%}
+									<img src="{{currentuser.headimage}}"  class="img img-circle" width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" class="img img-circle" width="70px" height="70px" alt="">
+									{% endif%}
+									<!--<img src="http://placehold.it/70x70"  alt=""> -->
+								</div>
+								<div class="media-body">
+									{% if currentuser.full_name%}
+									<h3 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{currentuser.username}}">{{currentuser.full_name}}</a></h3>
+									{% else%}
+									<h3 class="margin-t-1"><a href="personDetail?currentuser={{currentuser.username}}&target={{currentuser.username}}">{{currentuser.username}}</a></h3>
+									{% endif%}
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<p>Profile:</p>
+							<p>{{currentuser.profile}}</p>
+						</div>
+					</div>
+					<!-- Search friends-->
+					<div class="well">
+						<h4 class="margin-t-0">Search friends</h4>
+						<form action="searchFriends" method="POST">
+							<input type = 'hidden' value="{{currentuser.username}}" name="currentuser">
+							<div class="input-group">
+								<input type="text" class="form-control" id="search_form_name" name="search_form_name" placeholder="Please enter a name">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="submit">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
+							<hr>
+							<div class="input-group">
+								<input type="text" class="form-control" id="search_form_username" name="search_form_username" placeholder="Please enter a zNumber">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="submit">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
+
+						</form>
+					</div>
+
+					<!-- Panel search service-->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+								<h4 class="margin-t-0">Search service</h4>
+							</div>
+						<div class="panel-body">
+							<ul>
+								<li style="margin:20px;padding:0px" ><a href = "searchPostPage?currentuser={{currentuser.username}}" class="btn btn-primary" style="width:80%;background-color:#5D6D7E;border-color:5D6D7E" >Search Post</a></li>
+								<li style="margin:20px;padding:0px"><a href = "searchFriendsPage?currentuser={{currentuser.username}}" class="btn btn-success "style="width:80%;background-color:#5D6D7E;border-color:5D6D7E" >Search Friends</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Panel recommend service-->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+								<h4 class="margin-t-0">Recommend users</h4>
+								<p class="margin-t-0">{{rinfo}}</p>
+							</div>
+						<div class="panel-body">
+							{%for r in rec%}
+							<div class="well">
+							<div class="media">
+							<div class="media-left">
+								{% if r.headimage%}
+									<img src="{{r.headimage}}"  width="70px" height="70px" alt="">
+									{% else%}
+									<img src="{{url_for('static',filename = 'static/defaultimg.jpg')}}" width="70px" height="70px" alt="">
+									{% endif%}
+							</div>
+							<div class="media-body">
+									{% if r.full_name%}
+									<h4 class="margin-t-0">
+										<a href="profilePage?currentuser={{currentuser.username}}&target={{r.username}}">
+											{{r.full_name}}
+										</a>
+									</h4>
+									{% else%}
+									<h4 class="margin-t-0"><a href="profilePage?currentuser={{currentuser.username}}&target={{r.username}}">
+										{{r.username}}</a></h4>
+								{% endif%}
+								<p>Profile:</p>
+								{% for m in r.profile%}
+								{% if m %}
+								<p>{{m}}</p>
+								{% endif%}
+								{% endfor%}
+
+							</div>
+							<div class = "media-left">
+								<p>
+									{% set url= "addFriendRequest" %}
+									<button onclick="post('{{url}}',{target:'{{r.username}}',currentuser:'{{currentuser.username}}'})" class="btn btn-sm btn-success" sytle="float:right;">
+										<span class="glyphicon glyphicon-plus" ></span> add
+									</button>
+								</p>
+
+							</div>
+						</div>
+						</div>
+							{% endfor %}
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+		<!-- /.container-fluid -->
+{% endblock%}

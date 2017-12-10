@@ -1,0 +1,201 @@
+{% extends "base.html"%}
+{% block body_contents%}
+		<!-- Navigation -->
+	    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<img src="{{url_for('static',filename = 'static/unsw2.png')}}" width="100" class="navbar-brand" style ="height: 60px;padding-top: 5px;padding-bottom: 5px;width:200px;margin-left: -15px;">
+				</div>
+				<!-- /.navbar-header -->
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="home?currentuser={{currentuser.username}}">HOME</a></li>
+						<li><a href="searchPostPage?currentuser={{currentuser.username}}">SEARCH</a></li>
+						<li><a href="friendList?currentuser={{currentuser.username}}">FRIENDS</a></li>
+						<li><a href="profilePage?currentuser={{currentuser.username}}&target={{currentuser.username}}">SETTING</a></li>
+						<li><a href="logout?currentuser={{currentuser.username}}">LOG OUT</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<div class="page-header">
+						<h1>Show Profile</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-sm-8 col-sm-push-4">
+					<form id="editprofileform" method = "POST" action="editProfile">
+						<div class="list-group">
+							<a  class="list-group-item "style = "background-color:#F4F6F6;">
+							<h4 class="list-group-item-heading" >Username:</h4>
+						  </a>
+						  <a " class="list-group-item list-group-item">
+							  <input type="hidden" name = "currentuser" value="{{target.username}}" class="form-control">
+							  <h4 class="list-group-item-heading">{{target.username}}</h4>
+						  </a>
+
+							<a  class="list-group-item " style = "background-color:#EAEDED;">
+							<h4 class="list-group-item-heading">Gender:</h4>
+						  </a>
+							<a  class="list-group-item list-group-item">
+							  <div class="input-group input-group-lg" style="width:100%;">
+							 	<div class="radio-inline">
+								        <input type="radio" name="target.gender" id="gender1" value="Female">Female
+								</div>
+								<div class="radio-inline">
+								        <input type="radio" name="target.gender" id="gender2" value="Male">Male
+								</div>
+									<div class="radio-inline">
+								        <input type="radio" name="target.gender" id="gender3" value="Unknow" checked>Unknow
+								</div>
+							</div>
+						  </a>
+
+
+							<a class="list-group-item" style = "background-color:#D5DBDB;">
+
+							<h4 class="list-group-item-heading">Information</h4>
+						  </a>
+							<a  class="list-group-item" style="">
+								<div class="input-group" style="width:100%;">
+								<span class="input-group-addon">Email</span>
+							  <input type="text" name ="target.email" value = "{{target.email}}" class="form-control" placeholder="{{target.email}}">
+							</div>
+								<br>
+							<div class="input-group" style="width:100%;">
+								<span class="input-group-addon">Full Name</span>
+							  <input type="text" name ="target.full_name" value = "{{target.full_name}}" class="form-control" placeholder="{{target.full_name}}">
+							</div>
+								<br>
+								<div class="input-group" style="width:100%;">
+								<span class="input-group-addon">Birthday</span>
+							  <input type="text" name ="target.birthday" value = "{{target.birthday}}" class="form-control" placeholder="{{target.birthday}}">
+							</div>
+								<br>
+								<div class="input-group" style="width:100%;">
+								<span class="input-group-addon">Profile</span>
+							  <input type="text" name ="target.profile" value = "{{target.profile}}" class="form-control" placeholder="{{target.profile}}">
+							</div>
+								<br>
+								<div class="input-group" style="width:100%;">
+								<span class="input-group-addon">Program</span>
+								<input type="text" name ="target.program" value = "{{target.program}}" class="form-control" placeholder="{{target.program}}">
+							</div>
+								<br>
+								<div class="input-group" style="width:100%;">
+									<span class="input-group-addon">Course</span>
+									<input type="text" name ="target.course" value = "{{target.course}}" class="form-control" placeholder="{{target.course}}">
+								</div>
+								<br>
+								<div class="input-group input-group" style="width:100%;">
+							  <span class="input-group-addon">Suburb</span>
+							  <input type="text" name ="target.home_suburb" value = "{{target.home_suburb}}" class="form-control" placeholder="{{target.home_suburb}}">
+						  </div>
+								<br>
+								<div class="input-group input-group" style="width:100%;">
+									<span class="input-group-addon">Latitude</span>
+									<input type="text" name ="target.home_latitude" value = "{{target.home_latitude}}" class="form-control" placeholder="{{target.home_latitude}}">
+								</div>
+								<br>
+								<div class="input-group input-group" style="width:100%;">
+									<span class="input-group-addon">Longitude</span>
+									<input type="text" name ="target.home_longitude" value = "{{target.home_longitude}}" class="form-control" placeholder="{{target.home_longitude}}">
+								</div>
+							</a>
+							<br>
+							<a  class="list-group-item " style = "background-color:#F4F6F6;">
+								<p class="list-group-item-heading">Do you want to be notified by UNSWtalk when you have new message?</p>
+						  </a>
+						  <a  class="list-group-item list-group-item">
+							<div class="radio-inline">
+								    <label>
+								        <input type="radio" name="target.notified" id="notification1" value="true">YES
+								    </label>
+								</div>
+								<div class="radio-inline">
+								    <label>
+								        <input type="radio" name="target.notified" id="notification2" value="false">NO
+								    </label>
+								</div>
+						  </a>
+							<br>
+
+
+
+
+						</div>
+						<div class="form-group">
+								<input id="savebutton" type="submit" value="Save" class="btn" tabindex="7" style="background-color:#2980B9;  border-color:#2980B9;color:#FDFEFE;float:right; width:100%">
+						</div>
+					</form>
+
+
+				</div>
+				<div class="col-sm-4 col-sm-pull-8">
+				<!-- Panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">The Image</h4>
+						</div>
+						<div class="panel-body" align="center">
+						<img class="img-response" src="{{target.headimage}}" alt="">
+						</div>
+
+						<form id="editimageform" method = "POST" enctype="multipart/form-data">
+					<a  class="list-group-item list-group-item">
+							<input id="fileup" name="headimage" type="file" class="file"  data-msg-placeholder="Update New Image"  accept="image/gif,image/jpeg,image/x-png"/>
+					</a>
+					</form>
+
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">Account service</h4>
+						</div>
+						<div class="panel-body">
+
+
+								<ul>
+									<input type="hidden" value="{{currentuser.username}}">
+									{% set url= "deleteAccount" %}
+									<li style="margin:20px;padding:0px"><a href="changePasswordPage?currentuser={{currentuser.username}}"  class="btn btn-warning" style="width:80%;"tabindex="7" >Change Password</a></li>
+									<li style="margin:20px;padding:0px"><botton onclick="deleteAccount('{{url}}',{currentuser:'{{currentuser.username}}'})"  class="btn btn-danger" style="width:80%;"tabindex="7" >Detele this Account</botton></li>
+								</ul>
+
+						</div>
+					</div>
+				</div>
+			<!-- /.row -->
+			</div>
+			<!-- /.row -->
+			<hr>
+			<footer class="margin-tb-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<p>Copyright &copy; UNSWtalk 2017</p>
+					</div>
+				</div>
+
+
+			</footer>
+
+		</div>
+
+		<!-- /.container-fluid -->
+
+{% endblock%}
+
